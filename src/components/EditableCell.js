@@ -6,7 +6,7 @@ export default class EditableCell extends Component {
   state = {
     value:this.props.value,
     editing:false
-  };
+  }
   handleMouseEnter() {
     this.setState({hover:true})
   }
@@ -14,38 +14,57 @@ export default class EditableCell extends Component {
     this.setState({hover:false})
   }
   editStart() {
-    this.setState({editing:true})
+    this.setState({editing:true}, ()=>{this.refs[this.props.inputRef].focus()});
   }
   editEnd() {
     this.setState({editing:false})
     this.props.onEdit(this.props.field, this.state.value)
   }
-  handleChange(evt) {
-    const val = evt.target.value;
-    this.setState({value:val});
+  //Sanitize chars not suited for input type
+  isAcceptableInput(value) {
+    if (!this.props.numericOnly) {return true;}
+
   }
-  getCell() {
-    if (this.state.editing) {
-      return <TextField hintText={'First Name'} value={this.state.value} onChange={this.handleChange.bind(this)} />
-    } else if (this.state.hover){
-      return <span>{this.state.value}<i className="material-icons" style={{fontSize:'1em'}}>edit</i></span>
-    } else {
-      return this.state.value;
+  handleChange(evt) {
+    const value = evt.target.value;
+    if (isAcceptableInput(value)) {
+      this.setState({value});
     }
+  }
+  //Blur on enter
+  handleKeyUp(evt) {
+    if (evt.keyCode === 13) {
+      this.editEnd()
+    }
+  }
+  //Prevent any characters that don't match the type from being entered
+  handleKeyDown(evt) {
+    if (!this.props.numericOnly) {return;}
+
+
+    const isInt = !isNaN(parseInt(evt.key));
+    if (isInt) {return;}
+
+    //Don't let it enter
+    evt.preventDefault();
+    return false;
   }
 
 
   render() {
-    let cell = this.getCell();
+    const hoverIcon = this.state.hover ? <i className="material-icons" style={{fontSize:'1em'}}>edit</i> : null;
+    const viewCell = !this.state.editing ? <span>{this.state.value}{hoverIcon}</span> : null;
+    const editCell = this.state.editing ? <TextField ref={this.props.inputRef} onBlur={this.editEnd.bind(this)} hintText={this.props.hintText} value={this.state.value} onChange={this.handleChange.bind(this)}/> : null;
 
     return (
       <TableRowColumn
         onMouseEnter={this.handleMouseEnter.bind(this)}
         onMouseLeave={this.handleMouseLeave.bind(this)}
-        onBlur={this.editEnd.bind(this)}
         onDoubleClick={this.editStart.bind(this)}
+        onKeyUp={this.handleKeyUp.bind(this)}
       >
-        {cell}
+        {editCell}
+        {viewCell}
       </TableRowColumn>
     )
   }

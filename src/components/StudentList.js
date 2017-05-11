@@ -5,7 +5,7 @@ import List from './List'
 const StudentList = (props) => {
   return (
     <div>
-      <AppBar title="My AppBar" />
+      <AppBar title="Student Grades" />
       <List {...props} />
     </div>
   )

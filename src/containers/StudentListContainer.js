@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import StudentList from '../components/StudentList'
-import { addStudent, removeStudent, updateStudent } from '../actions/student.js'
+import { addStudent, removeStudent, tryUpdateStudent } from '../actions/student.js'
 
 
 const mapStateToProps = (state) => {
@@ -18,7 +18,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(removeStudent(studentId))
     },
     updateStudent: (student) => {
-      dispatch(updateStudent(student))
+      dispatch(tryUpdateStudent(student))
     }
   }
 }

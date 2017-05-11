@@ -24,9 +24,9 @@ const Row = ({student, updateStudent}) => {
   return (
     <TableRow >
       <TableRowColumn>{student.studentId}</TableRowColumn>
-      <EditableCell onEdit={onEdit} value={student.firstName} field={'firstName'}/>
-      <TableRowColumn>{student.lastName}</TableRowColumn>
-      <TableRowColumn>{student.grade}</TableRowColumn>
+      <EditableCell onEdit={onEdit} value={student.firstName} field={'firstName'} hintText={'First Name'} inputRef={'first' + student.studentId} />
+      <EditableCell onEdit={onEdit} value={student.lastName} field={'lastName'} hintText={'Last Name'} inputRef={'last' + student.studentId}/>
+      <EditableCell onEdit={onEdit} value={student.grade} field={'grade'} hintText={'Grade'} inputRef={'grade' + student.studentId} numericOnly={true} />
     </TableRow>
   )
 }

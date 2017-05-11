@@ -1,4 +1,5 @@
 import { ADD_STUDENT, REMOVE_STUDENT, UPDATE_STUDENT } from './actions/student'
+import dataStore from './models/dataStore'
 
 //Generate an 8 digit random string for an id.
 const makeId = () => {
@@ -7,9 +8,8 @@ const makeId = () => {
 }
 
 const getInitialStudents = () => {
-  const lsStudents = localStorage.getItem('students');
-  console.log(lsStudents);
-  return lsStudents ? JSON.parse(lsStudents) : [];
+  const ds = dataStore().getAll();
+  return ds;
 }
 
 const students = (state = getInitialStudents(), action) => {
